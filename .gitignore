@@ -1,0 +1,66 @@
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Environment Variables
+.env
+.env.*
+
+# Flask
+instance/
+.flaskenv
+
+# Temporary Data
+temp_data/
+*.json
+
+# Uploads (keep folder, ignore files)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build / Distribution
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# mypy
+.mypy_cache/
+
+# Ruff
+.ruff_cache/
+
+# WeasyPrint temporary files
+*.pdf
+
+# Misc
+*.tmp
+*.bak

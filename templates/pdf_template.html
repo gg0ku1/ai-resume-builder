@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ resume_data['name'] }} — Resume</title>
+    <style>
+        /* ══════════════════════════════════════════════════════════
+           WeasyPrint PDF Template — matches the Modern web preview
+           One A4 page, sidebar layout, purple header
+           ══════════════════════════════════════════════════════════ */
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 210mm;
+            height: 297mm;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 8.5pt;
+            line-height: 1.45;
+            color: #1a1a2e;
+            background: #ffffff;
+            overflow: hidden;   /* hard-clip at one page */
+        }
+
+        /* ── Outer wrapper exactly fills one A4 page ── */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ══ HEADER BAR ══════════════════════════════════════════ */
+        .header {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            color: #ffffff;
+            padding: 14pt 18pt;
+            display: flex;
+            align-items: center;
+            gap: 14pt;
+            flex-shrink: 0;
+        }
+
+        .header-photo {
+            width: 56pt;
+            height: 56pt;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2pt solid rgba(255,255,255,0.35);
+            flex-shrink: 0;
+        }
+
+        .header-text { flex: 1; }
+
+        .header-name {
+            font-size: 20pt;
+            font-weight: 800;
+            letter-spacing: -0.3pt;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .header-objective {
+            font-size: 7.5pt;
+            color: rgba(255,255,255,0.70);
+            margin-top: 3pt;
+            margin-bottom: 5pt;
+        }
+
+        .header-contacts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3pt 14pt;
+        }
+
+        .header-contacts span {
+            font-size: 7pt;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .header-contacts .dot {
+            color: #00d9c0;
+            margin-right: 3pt;
+        }
+
+        /* ══ BODY: SIDEBAR + MAIN ════════════════════════════════ */
+        .body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 68mm;
+            background: #ede9fe;
+            padding: 12pt 11pt;
+            flex-shrink: 0;
+            border-right: 1.5pt solid #c4b5fd;
+            overflow: hidden;
+        }
+
+        /* ── Main column ── */
+        .main {
+            flex: 1;
+            padding: 12pt 14pt;
+            overflow: hidden;
+        }
+
+        /* ══ SECTION STYLES ══════════════════════════════════════ */
+        .section {
+            margin-bottom: 9pt;
+        }
+
+        /* Sidebar section titles */
+        .sidebar .section-title {
+            font-size: 7pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1pt;
+            color: #1e1b4b;
+            border-bottom: 1.5pt solid #a78bfa;
+            padding-bottom: 2pt;
+            margin-bottom: 5pt;
+        }
+
+        /* Main section titles */
+        .main .section-title {
+            font-size: 7pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1pt;
+            color: #4f46e5;
+            border-bottom: 1.5pt solid #c4b5fd;
+            padding-bottom: 2pt;
+            margin-bottom: 5pt;
+        }
+
+        .section-body {
+            font-size: 8pt;
+            color: #374151;
+            line-height: 1.45;
+        }
+
+        /* Paragraph blocks (first line bold = entry title) */
+        .entry {
+            margin-bottom: 5pt;
+        }
+
+        .entry-title {
+            font-weight: 700;
+            font-size: 8pt;
+            color: #1a1a2e;
+            display: block;
+        }
+
+        .entry-body {
+            font-size: 7.5pt;
+            color: #4b5563;
+            line-height: 1.4;
+        }
+
+        /* Skills as compact list */
+        .skills-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .skills-list li {
+            font-size: 7.5pt;
+            color: #374151;
+            padding: 1.5pt 0;
+            border-bottom: 0.5pt solid #ddd6fe;
+            line-height: 1.3;
+        }
+
+        .skills-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Profile / summary paragraph */
+        .summary-text {
+            font-size: 8pt;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .pdf-footer {
+            flex-shrink: 0;
+            text-align: center;
+            font-size: 6pt;
+            color: #9ca3af;
+            padding: 4pt;
+            border-top: 0.5pt solid #e5e7eb;
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ══ HEADER ══ -->
+    <div class="header">
+        {% if photo_url %}
+        <img src="{{ photo_url }}" alt="{{ resume_data['name'] }}" class="header-photo">
+        {% else %}
+        <div class="header-photo" style="background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:18pt; color:rgba(255,255,255,0.5);">
+            &#9786;
+        </div>
+        {% endif %}
+
+        <div class="header-text">
+            <div class="header-name">{{ resume_data['name'] }}</div>
+            {% if resume_data.get('job_preferences') %}
+            <div class="header-objective">{{ resume_data['job_preferences'] | truncate(90) }}</div>
+            {% endif %}
+            <div class="header-contacts">
+                {% if resume_data.get('email') %}
+                <span><span class="dot">✉</span>{{ resume_data['email'] }}</span>
+                {% endif %}
+                {% if resume_data.get('phone') %}
+                <span><span class="dot">✆</span>{{ resume_data['phone'] }}</span>
+                {% endif %}
+                {% if resume_data.get('links') %}
+                {% for link in resume_data['links'].split(',') %}
+                <span><span class="dot">⚑</span>{{ link.strip() }}</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ BODY ══ -->
+    <div class="body">
+
+        <!-- ── SIDEBAR ── -->
+        <div class="sidebar">
+
+            {% if resume_data.get('skills') %}
+            <div class="section">
+                <div class="section-title">Skills</div>
+                <div class="section-body">
+                    {% set skill_lines = resume_data['skills'].split('\n') %}
+                    <ul class="skills-list">
+                        {% for line in skill_lines %}
+                        {% if line.strip() %}
+                        <li>{{ line.strip() }}</li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if resume_data.get('education') %}
+            <div class="section">
+                <div class="section-title">Education</div>
+                <div class="section-body">
+                    {% set edu_blocks = resume_data['education'].split('\n\n') %}
+                    {% for block in edu_blocks %}
+                        {% set lines = block.strip().split('\n') %}
+                        {% if lines and lines[0].strip() %}
+                        <div class="entry">
+                            <span class="entry-title">{{ lines[0] }}</span>
+                            {% if lines|length > 1 %}
+                            <span class="entry-body">{{ lines[1:] | join(' · ') }}</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Dynamic sidebar sections if any -->
+            {% for sid, sec in resume_data.get('dynamic_sections', {}).items() %}
+            {% if sec.content and loop.index <= 2 %}
+            <div class="section">
+                <div class="section-title">{{ sec.title }}</div>
+                <div class="section-body">
+                    <span class="entry-body">{{ sec.content | replace('\n\n', ' | ') | replace('\n', ', ') }}</span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+        </div><!-- /sidebar -->
+
+        <!-- ── MAIN ── -->
+        <div class="main">
+
+            {% if resume_data.get('profile') %}
+            <div class="section">
+                <div class="section-title">Professional Summary</div>
+                <div class="section-body">
+                    <p class="summary-text">{{ resume_data['profile'] }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if resume_data.get('experience') %}
+            <div class="section">
+                <div class="section-title">Work Experience</div>
+                <div class="section-body">
+                    {% set blocks = resume_data['experience'].split('\n\n') %}
+                    {% for block in blocks %}
+                        {% set lines = block.strip().split('\n') %}
+                        {% if lines and lines[0].strip() %}
+                        <div class="entry">
+                            <span class="entry-title">{{ lines[0] }}</span>
+                            {% if lines|length > 1 %}
+                            <span class="entry-body">
+                                {% for line in lines[1:] %}
+                                {% if line.strip() %}{{ line.strip() }}{% if not loop.last %}<br>{% endif %}{% endif %}
+                                {% endfor %}
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if resume_data.get('projects') %}
+            <div class="section">
+                <div class="section-title">Projects</div>
+                <div class="section-body">
+                    {% set blocks = resume_data['projects'].split('\n\n') %}
+                    {% for block in blocks %}
+                        {% set lines = block.strip().split('\n') %}
+                        {% if lines and lines[0].strip() %}
+                        <div class="entry">
+                            <span class="entry-title">{{ lines[0] }}</span>
+                            {% if lines|length > 1 %}
+                            <span class="entry-body">
+                                {% for line in lines[1:] %}
+                                {% if line.strip() %}{{ line.strip() }}{% if not loop.last %}<br>{% endif %}{% endif %}
+                                {% endfor %}
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div><!-- /main -->
+    </div><!-- /body -->
+
+    <!-- ══ FOOTER ══ -->
+    <div class="pdf-footer">
+        Generated with ResumeAI — Powered by Gemini
+    </div>
+
+</div><!-- /page -->
+</body>
+</html>

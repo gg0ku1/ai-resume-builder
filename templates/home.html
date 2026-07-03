@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Builder — Create a Professional Resume in Minutes</title>
+    <meta name="description" content="Build a stunning, AI-enhanced resume in minutes. Powered by Gemini AI. Get professional content suggestions, edit everything, and download as PDF.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header class="app-header">
+        <a href="{{ url_for('home') }}" class="logo">
+            <i class="fas fa-file-alt"></i>
+            <span>Resume<em>AI</em></span>
+        </a>
+        <nav>
+            <a href="{{ url_for('form') }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Build My Resume
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="landing-page">
+            <div class="landing-content">
+                <div class="landing-badge">
+                    <i class="fas fa-circle" style="color: var(--teal); font-size: 8px;"></i>
+                    Powered by Gemini 2.0 Flash
+                </div>
+
+                <h1>
+                    Build a Resume That<br>
+                    <span class="gradient-text">Actually Gets You Hired</span>
+                </h1>
+
+                <p class="tagline">
+                    Enter your details, let AI craft professional content for every section,
+                    then fine-tune and download — in under 5 minutes.
+                </p>
+
+                <div class="cta-group">
+                    <a href="{{ url_for('form') }}" class="btn btn-primary">
+                        <i class="fas fa-magic"></i> Start Building
+                    </a>
+                    <a href="{{ url_for('demo') }}" class="btn btn-teal">
+                        <i class="fas fa-flask"></i> Try Demo
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        <i class="fas fa-info-circle"></i> See How It Works
+                    </a>
+                </div>
+
+                <div class="features" id="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>AI-Powered Content</h3>
+                        <p>Gemini AI rewrites your experience with action verbs, quantified achievements, and professional language.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon" style="background: var(--teal-glow); color: var(--teal);">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <h3>Side-by-Side Editor</h3>
+                        <p>Compare your original input vs AI suggestions. Apply or reject changes with one click.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon" style="background: rgba(245,158,11,0.12); color: var(--amber);">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3>PDF Download</h3>
+                        <p>Download a pixel-perfect, print-ready PDF of your resume — no watermarks, no limits.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon" style="background: rgba(16,185,129,0.1); color: var(--success);">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        <h3>Custom Sections</h3>
+                        <p>Add Projects, Certifications, Publications, Languages — any section you need.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; {{ current_year }} <span>ResumeAI</span> — Built with Gemini 2.0 Flash</p>
+    </footer>
+</body>
+</html>

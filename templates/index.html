@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Your Details | ResumeAI</title>
+    <meta name="description" content="Fill in your resume details and let AI enhance them professionally.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header class="app-header">
+        <a href="{{ url_for('home') }}" class="logo">
+            <i class="fas fa-file-alt"></i>
+            <span>Resume<em>AI</em></span>
+        </a>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+        </nav>
+    </header>
+
+    <!-- Loading overlay shown during AI generation -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <p class="loading-text">Generating your <em>AI-enhanced</em> resume sections…</p>
+        <p style="font-size:13px; color: var(--text-muted); margin-top: 6px;">This usually takes 10–20 seconds</p>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Enter Your Resume Details</h1>
+            <p class="subtitle">Fill in the sections below. AI will enhance each one for you on the next step.</p>
+        </div>
+
+        <form action="{{ url_for('form') }}" method="POST" enctype="multipart/form-data"
+              class="form-container" id="resume-form">
+
+            <!-- ── Personal Information ── -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <div class="section-icon"><i class="fas fa-user"></i></div>
+                    Personal Information
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="e.g., Priya Sharma">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="you@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" name="phone" required placeholder="+91 98765 43210">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="links">Professional Links <span class="hint">(LinkedIn, GitHub, Portfolio — comma separated)</span></label>
+                    <input type="text" id="links" name="links" placeholder="linkedin.com/in/you, github.com/you">
+                </div>
+
+                <div class="form-group">
+                    <label for="profile_picture">Profile Picture <span class="hint">(Optional — recommended 500×500)</span></label>
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+                    <div id="photo-preview-container"></div>
+                </div>
+            </div>
+
+            <!-- ── Professional Summary ── -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <div class="section-icon teal"><i class="fas fa-pen"></i></div>
+                    Professional Summary
+                </div>
+
+                <div class="ai-hint-box">
+                    <i class="fas fa-magic"></i>
+                    Leave blank and AI will auto-generate a professional summary for you.
+                </div>
+
+                <div class="form-group">
+                    <label for="profile">Summary <span class="hint">(Optional — leave blank for AI)</span></label>
+                    <textarea id="profile" name="profile" rows="4"
+                        placeholder="Brief overview of your strengths and career goals…"></textarea>
+                </div>
+            </div>
+
+            <!-- ── Work Experience ── -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <div class="section-icon"><i class="fas fa-briefcase"></i></div>
+                    Work Experience
+                </div>
+                <div class="form-group">
+                    <label for="experience">Experience Details</label>
+                    <textarea id="experience" name="experience" required rows="6"
+                        placeholder="Separate each job with a blank line. First line = Company | Title | Dates&#10;&#10;e.g.:&#10;Google | Software Engineer | June 2022 – Present&#10;Worked on search infrastructure, built APIs, reduced latency by 30%&#10;&#10;Infosys | Intern | Jan 2022 – May 2022&#10;Developed internal tools using Python and Flask"></textarea>
+                </div>
+            </div>
+
+            <!-- ── Projects ── -->
+            <div class="form-section" id="projects-section">
+                <div class="form-section-title">
+                    <div class="section-icon teal"><i class="fas fa-code"></i></div>
+                    Projects
+                </div>
+                <div class="form-group">
+                    <label for="projects">Project Details <span class="hint">(Optional)</span></label>
+                    <textarea id="projects" name="projects" rows="5"
+                        placeholder="First line of each block = Project name. Separate projects with a blank line.&#10;&#10;e.g.:&#10;AI Resume Builder&#10;Built a Flask + Gemini AI web app to generate professional resumes&#10;Tech: Python, Flask, Google Gemini API"></textarea>
+                </div>
+            </div>
+
+            <!-- ── Education ── -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <div class="section-icon"><i class="fas fa-graduation-cap"></i></div>
+                    Education
+                </div>
+                <div class="form-group">
+                    <label for="education">Education Details</label>
+                    <textarea id="education" name="education" required rows="4"
+                        placeholder="Separate each entry with a blank line. First line = Institution | Degree | Year&#10;&#10;e.g.:&#10;VJTI Mumbai | B.Tech Computer Engineering | 2024&#10;CGPA: 8.4 / 10"></textarea>
+                </div>
+            </div>
+
+            <!-- ── Skills ── -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <div class="section-icon teal"><i class="fas fa-tools"></i></div>
+                    Skills
+                </div>
+                <div class="form-group">
+                    <label for="skills">Skills</label>
+                    <textarea id="skills" name="skills" required rows="4"
+                        placeholder="List all skills — technical, soft, tools, languages&#10;e.g.: Python, Flask, React, SQL, Docker, Communication, Leadership, Git"></textarea>
+                </div>
+            </div>
+
+            <!-- ── Career Objective ── -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <div class="section-icon"><i class="fas fa-bullseye"></i></div>
+                    Career Objective
+                </div>
+                <div class="form-group">
+                    <label for="job_preferences">Job Preferences / Career Objective</label>
+                    <textarea id="job_preferences" name="job_preferences" required rows="2"
+                        placeholder="e.g.: Seeking a full-stack developer role in a product-based company focused on AI/ML"></textarea>
+                </div>
+            </div>
+
+            <!-- ── Dynamic Custom Sections ── -->
+            <div id="dynamic-sections"></div>
+
+            <!-- ── Form Controls ── -->
+            <div class="form-actions" style="justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                <div style="display:flex; gap: 10px; flex-wrap: wrap;">
+                    <button type="button" id="add-section-btn" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i> Add Custom Section
+                    </button>
+                    <button type="button" onclick="fillDemo()" class="btn btn-ghost" title="Fill form with realistic demo data for testing">
+                        <i class="fas fa-flask"></i> Fill Demo Data
+                    </button>
+                </div>
+                <button type="submit" class="btn btn-primary" id="submit-btn">
+                    <i class="fas fa-magic"></i> Generate with AI
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <footer class="app-footer">
+        <p>&copy; {{ current_year }} <span>ResumeAI</span></p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+    // ── Demo fill ─────────────────────────────────────────────────────────
+function fillDemo() {
+    const demo = {
+        name:            'Arjun Mehta',
+        email:           'arjun.mehta@email.com',
+        phone:           '+91 98765 43210',
+        links:           'linkedin.com/in/arjunmehta, github.com/arjunmehta',
+        profile:         '',
+        experience:
+`Google India | Software Engineer | July 2023 – Present
+Worked on Search infrastructure; optimised indexing pipeline reducing latency by 35%.
+Built internal tooling used by 200+ engineers; saved ~4 hours per engineer per week.
+
+Infosys | Software Developer Intern | Jan 2023 – June 2023
+Developed REST APIs using Python Flask and PostgreSQL for an HR management product.
+Wrote unit tests achieving 90% coverage; reduced production bugs by 40%.`,
+        projects:
+`AI Resume Builder
+Built a full-stack web app (Flask + Gemini API) that generates AI-enhanced resumes.
+Tech: Python, Flask, Google Gemini 2.0 Flash, HTML/CSS/JS
+
+E-Commerce Price Tracker
+Scraped 5 major e-commerce sites and sent price-drop alerts via email/Telegram.
+Tech: Python, BeautifulSoup, Celery, Redis, Docker`,
+        education:
+`VJTI Mumbai | B.Tech Computer Engineering | 2023
+CGPA: 8.7 / 10  |  Department Rank: 3
+
+Delhi Public School | HSC (Science) | 2019
+Percentage: 94.2%`,
+        skills:
+`Python, Java, JavaScript, TypeScript, SQL
+Flask, FastAPI, React, Node.js
+PostgreSQL, MongoDB, Redis
+Docker, Kubernetes, Git, CI/CD
+Communication, Problem Solving, Team Leadership`,
+        job_preferences: 'Seeking a Software Engineer role at a product-based company focused on scalable backend systems and AI/ML applications.',
+    };
+
+    // Populate all form fields
+    Object.entries(demo).forEach(([key, value]) => {
+        const el = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
+        if (el) el.value = value;
+    });
+
+    // Scroll to top and flash confirmation
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const btn = document.querySelector('[onclick="fillDemo()"]');
+    if (btn) {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Demo filled!';
+        btn.style.background = 'rgba(0,217,192,0.15)';
+        btn.style.borderColor = 'var(--teal)';
+        btn.style.color = 'var(--teal)';
+        setTimeout(() => { btn.innerHTML = orig; btn.style = ''; }, 2500);
+    }
+}
+    </script>
+</body>
+</html>
