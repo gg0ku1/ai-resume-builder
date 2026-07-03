@@ -1,0 +1,13 @@
+services:
+  ai-resume-builder:
+    build: .
+
+    container_name: ai-resume-builder
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - .env
+
+    restart: unless-stopped
