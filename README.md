@@ -16,19 +16,28 @@ An AI-powered Resume Builder built with <b>Flask</b> and <b>Google Gemini AI</b>
 ![Flask](https://img.shields.io/badge/Flask-Web%20Framework-black)
 ![Gemini](https://img.shields.io/badge/Google-Gemini-orange)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED)
+![Gunicorn](https://img.shields.io/badge/Gunicorn-Production_Server-499848)
+![Nginx](https://img.shields.io/badge/Nginx-Reverse_Proxy-009639)
+![AWS EC2](https://img.shields.io/badge/AWS-EC2-FF9900)
+![Render](https://img.shields.io/badge/Render-Deployed-46E3B7)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 </p>
 
 ---
+## 🌐 Live Demo
+
+- Render: https://your-render-url.onrender.com
+---
+
 
 # 📖 Overview
 
 AI Resume Builder is a full-stack Flask web application that leverages **Google Gemini AI** to transform basic user inputs into professionally written, ATS-friendly resume content.
 
-The application intelligently enhances professional summaries, technical skills, projects, work experience, and career objectives while allowing users to review and edit every AI-generated section before exporting the final resume as a print-ready PDF.
+The application intelligently enhances professional summaries, technical skills, work experience, education, and career objectives while allowing users to review and edit every AI-generated section before exporting the final resume as a print-ready PDF.
 
-The project has also been **Dockerized**, making setup and deployment simple and consistent across different environments.
+The project is fully containerized using **Docker** and supports both local development and production-style deployments. It has been successfully deployed using **Docker**, **Gunicorn**, **Nginx**, **Render**, and **AWS EC2**, demonstrating an end-to-end deployment workflow from development to production.
 
 ---
 
@@ -41,11 +50,16 @@ The project has also been **Dockerized**, making setup and deployment simple and
 - 🎯 Career Objective generation
 - 📚 Education formatting
 - 👤 Optional profile picture upload
-- ✏️ Edit AI-generated content before finalizing
+- ✏️ Review and edit AI-generated content
 - 📄 Export professionally formatted PDF resumes
 - 📱 Responsive user interface
 - 🔐 Environment variable configuration
 - 🐳 Docker support
+- 🔄 Docker Compose support
+- 🚀 Production deployment using Gunicorn
+- 🌐 Reverse proxy using Nginx
+- ☁️ AWS EC2 deployment
+- 🌍 Render deployment
 
 ---
 
@@ -57,6 +71,9 @@ The project has also been **Dockerized**, making setup and deployment simple and
 | Frontend | HTML, CSS, JavaScript, Jinja2 |
 | AI | Google Gemini API |
 | PDF Generation | WeasyPrint |
+| Web Server | Gunicorn |
+| Reverse Proxy | Nginx |
+| Cloud | AWS EC2, Render |
 | Configuration | python-dotenv |
 | Containerization | Docker, Docker Compose |
 
@@ -64,33 +81,37 @@ The project has also been **Dockerized**, making setup and deployment simple and
 
 # 🏗️ System Architecture
 
-```
-                    +-----------------------+
-                    |      Web Browser      |
-                    +-----------+-----------+
-                                |
-                                |
-                        Flask Application
-                                |
-        +-----------------------+-----------------------+
-        |                                               |
-        |                                               |
- Google Gemini API                               HTML Templates
-        |                                               |
- AI-generated Resume Content                    Resume Preview
-                                                        |
-                                                        |
-                                                  WeasyPrint
-                                                        |
-                                                        |
-                                                  PDF Resume
+```text
+                         Internet
+                             │
+                             ▼
+                        Nginx (Port 80)
+                             │
+                             ▼
+                    Gunicorn WSGI Server
+                             │
+                             ▼
+                      Flask Application
+               ┌─────────────┴─────────────┐
+               │                           │
+               ▼                           ▼
+      Google Gemini API             HTML Templates
+               │                           │
+               ▼                           ▼
+     AI-generated Resume Content     Resume Preview
+                                           │
+                                           ▼
+                                      WeasyPrint
+                                           │
+                                           ▼
+                                       PDF Resume
 ```
 
 ---
 
 # 📂 Project Structure
 
-```
+```text
 AI-Resume-Builder/
 │
 ├── app.py
@@ -119,7 +140,7 @@ AI-Resume-Builder/
 
 # ⚙️ Local Installation
 
-### 1. Clone the repository
+## 1. Clone the repository
 
 ```bash
 git clone https://github.com/gg0ku1/ai-resume-builder.git
@@ -129,16 +150,16 @@ cd ai-resume-builder
 
 ---
 
-### 2. Create a virtual environment
+## 2. Create a virtual environment
 
-**Windows**
+### Windows
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-**Linux / macOS**
+### Linux / macOS
 
 ```bash
 python3 -m venv venv
@@ -147,7 +168,7 @@ source venv/bin/activate
 
 ---
 
-### 3. Install dependencies
+## 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -155,7 +176,7 @@ pip install -r requirements.txt
 
 ---
 
-### 4. Create a `.env` file
+## 4. Create a `.env` file
 
 ```env
 GEMINI_API_KEY=your_api_key
@@ -165,7 +186,7 @@ SECRET_KEY=your_secret_key
 
 ---
 
-### 5. Run the application
+## 5. Run the application
 
 ```bash
 python app.py
@@ -198,6 +219,41 @@ To stop the application:
 ```bash
 docker compose down
 ```
+
+---
+
+# 🚀 Deployment
+
+The application supports multiple deployment environments.
+
+| Environment | Technology |
+|-------------|------------|
+| Local Development | Flask Development Server |
+| Containerization | Docker & Docker Compose |
+| Production WSGI Server | Gunicorn |
+| Reverse Proxy | Nginx |
+| Cloud Hosting | AWS EC2 |
+| Managed Hosting | Render |
+
+### Production Request Flow
+
+```text
+Browser
+    │
+    ▼
+Nginx
+    │
+    ▼
+Gunicorn
+    │
+    ▼
+Flask Application
+    │
+    ▼
+Google Gemini API
+```
+
+The production deployment uses **Gunicorn** as the WSGI application server while **Nginx** acts as a reverse proxy, providing a production-ready deployment architecture.
 
 ---
 
@@ -237,24 +293,34 @@ docker compose down
 
 ![](Screenshots/Screenshot4.png)
 
----
-
 ## 📄 Final PDF Preview
 
 ![](Screenshots/Screenshot5.png)
 
 ---
 
+## 🌍 Live Application on AWS EC2
+
+![](Screenshots/Screenshot6.png)
+
+---
+
+## ☁️ AWS EC2 Deployment
+
+![](Screenshots/Screenshot7.png)
+
+---
+
 # 🔮 Future Improvements
 
-- Multiple resume templates
 - Migration to the latest Google GenAI SDK
+- Multiple resume templates
 - User authentication
 - Resume version history
 - Database integration
-- Cloud deployment (AWS / Azure)
+- HTTPS using Let's Encrypt
 - CI/CD with GitHub Actions
-- Production deployment using Gunicorn and Nginx
+- Kubernetes deployment
 
 ---
 
