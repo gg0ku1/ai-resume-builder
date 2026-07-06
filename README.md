@@ -27,7 +27,7 @@ An AI-powered Resume Builder built with <b>Flask</b> and <b>Google Gemini AI</b>
 ---
 ## 🌐 Live Demo
 
-- Render: https://your-render-url.onrender.com
+- Render: https://ai-resume-builder-zfl4.onrender.com
 ---
 
 
